@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nrayo & Melat — Wedding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@400;500;600&family=Noto+Sans+Ethiopic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf4e8; --panel:#fffdf7; --gold:#c8922a; --gold-dk:#a8761c; --gold-lt:#e3c486;
+  --text:#4a3f2f; --muted:#8a7d63; --accent:#9c4a32; --green:#1f5132;
+  --serif:'Cormorant Garamond',serif; --display:'Playfair Display',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--serif); background:var(--bg); color:var(--text);
+  font-size:18px; line-height:1.6; overflow-x:hidden;
+}
+body.lang-ti, .lang-ti :where(h1,h2,h3,p,span,a,div,button){font-family:'Noto Sans Ethiopic',var(--serif);}
+.en{display:none}.ti{display:none}
+body.lang-en .en{display:revert}
+body.lang-ti .ti{display:revert}
+body.lang-en .blk-en{display:block}
+body.lang-ti .blk-ti{display:block}
+
+/* ---------- language switch ---------- */
+.lang-bar{position:fixed;top:14px;right:14px;z-index:200;display:flex;gap:0;
+  background:var(--panel);border:1px solid var(--gold);border-radius:30px;overflow:hidden;
+  box-shadow:0 4px 14px rgba(168,118,28,.18)}
+.lang-bar button{font-family:var(--serif);background:transparent;border:none;cursor:pointer;
+  padding:7px 16px;font-size:15px;color:var(--gold-dk);letter-spacing:.5px}
+.lang-bar button.on{background:var(--gold);color:#fff}
+.lang-bar button:last-child{font-family:'Noto Sans Ethiopic',serif}
+
+/* ---------- views ---------- */
+.view{display:none;min-height:100vh;animation:fade .8s ease both}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ---------- envelope ---------- */
+#envelopeView{align-items:center;justify-content:center;min-height:100vh;
+  background:radial-gradient(circle at 50% 40%,#fff8ea,#f3e6cc);padding:20px}
+#envelopeView.active{display:flex}
+.env-wrap{text-align:center}
+.env-hint{margin-top:26px;color:var(--gold-dk);font-style:italic;font-size:18px;letter-spacing:.5px;
+  animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.envelope{position:relative;width:330px;height:220px;margin:0 auto;cursor:pointer;
+  perspective:1200px;transition:transform .5s}
+.envelope:hover{transform:translateY(-4px)}
+.env-body{position:absolute;inset:0;background:linear-gradient(155deg,#fbf4e4,#f0e0c0);
+  border:1px solid var(--gold-lt);border-radius:8px;box-shadow:0 18px 40px rgba(120,90,30,.28)}
+.env-pocket{position:absolute;bottom:0;left:0;width:100%;height:100%;border-radius:8px;overflow:hidden;z-index:4}
+.env-pocket::before,.env-pocket::after{content:'';position:absolute;bottom:0;width:50%;height:100%}
+.env-pocket::before{left:0;background:linear-gradient(135deg,#f6ecd6 0 50%,transparent 50%)}
+.env-pocket::after{right:0;background:linear-gradient(-135deg,#f6ecd6 0 50%,transparent 50%)}
+.env-flap{position:absolute;top:0;left:0;width:100%;height:50%;z-index:6;transform-origin:top;
+  transition:transform .9s ease, z-index 0s .45s;
+  background:linear-gradient(155deg,#f3e4c5,#e9d4ac);
+  clip-path:polygon(0 0,100% 0,50% 100%);border-radius:8px 8px 0 0}
+.seal{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);z-index:8;
+  width:74px;height:74px;transition:opacity .4s, transform .5s}
+.env-letter{position:absolute;left:6%;width:88%;bottom:6%;height:74%;background:var(--panel);
+  border:1px solid var(--gold-lt);border-radius:6px;z-index:5;
+  transition:transform 1s ease .35s;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 16px rgba(120,90,30,.12)}
+.env-letter .mini{text-align:center;color:var(--accent)}
+.env-letter .mini .nm{font-family:var(--display);font-size:30px;color:var(--gold-dk)}
+.env-letter .mini .sub{font-style:italic;font-size:15px;color:var(--muted);margin-top:4px}
+.envelope.open .env-flap{transform:rotateX(180deg);z-index:1;transition:transform .9s ease}
+.envelope.open .seal{opacity:0;transform:translate(-50%,-50%) scale(.4)}
+.envelope.open .env-letter{transform:translateY(-128%) scale(1.04)}
+
+/* ---------- shared ---------- */
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+.gold-rule{display:flex;align-items:center;justify-content:center;gap:12px;margin:26px 0}
+.gold-rule .ln{height:1px;width:70px;background:linear-gradient(90deg,transparent,var(--gold))}
+.gold-rule .ln.r{background:linear-gradient(90deg,var(--gold),transparent)}
+.gold-rule .dot{width:8px;height:8px;background:var(--gold);transform:rotate(45deg)}
+.eyebrow{text-align:center;letter-spacing:4px;text-transform:uppercase;color:var(--gold-dk);
+  font-size:13px;font-style:italic}
+
+/* monogram seal */
+.seal-svg{width:100%;height:100%}
+
+/* ---------- home / hero ---------- */
+#homeView{padding-bottom:60px}
+.hero{text-align:center;padding:54px 0 10px}
+.hero .mono{width:108px;height:108px;margin:0 auto 18px}
+.hero .names{font-family:var(--display);color:var(--accent);font-size:46px;line-height:1.1;font-weight:500}
+.hero .amp{display:block;color:var(--gold);font-style:italic;font-size:30px;margin:6px 0;font-family:var(--serif)}
+.hero .nick{color:var(--muted);font-style:italic;font-size:17px;margin-top:2px}
+.verse{max-width:560px;margin:14px auto 0;text-align:center;color:var(--accent);font-style:italic;font-size:19px;line-height:1.55}
+.verse .ref{display:block;color:var(--gold-dk);font-style:normal;font-size:14px;letter-spacing:2px;margin-top:8px;text-transform:uppercase}
+
+/* countdown */
+.countdown{display:flex;justify-content:center;gap:14px;margin:30px 0 8px;flex-wrap:wrap}
+.cd-box{background:var(--panel);border:1px solid var(--gold-lt);border-radius:10px;min-width:74px;padding:12px 6px;text-align:center;
+  box-shadow:0 6px 16px rgba(168,118,28,.08)}
+.cd-box .n{font-family:var(--display);font-size:30px;color:var(--accent);line-height:1}
+.cd-box .l{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.cd-note{text-align:center;color:var(--muted);font-style:italic;font-size:15px;margin-top:4px}
+
+/* thank-you card */
+.thanks{background:var(--panel);border:1px solid var(--gold-lt);border-radius:14px;padding:30px 26px;margin:34px 0;
+  text-align:center;position:relative;box-shadow:0 10px 30px rgba(168,118,28,.10)}
+.thanks::before{content:'';position:absolute;inset:6px;border:1px solid rgba(200,146,42,.35);border-radius:10px;pointer-events:none}
+.thanks h2{font-family:var(--display);color:var(--gold-dk);font-weight:500;font-size:24px;margin-bottom:12px}
+.thanks p{font-size:20px;color:var(--text)}
+
+/* day buttons */
+.section-title{text-align:center;font-family:var(--display);color:var(--accent);font-size:28px;font-weight:500;margin:8px 0 4px}
+.days{display:grid;gap:16px;margin:24px 0}
+.day-card{background:var(--panel);border:1px solid var(--gold-lt);border-radius:14px;padding:22px 22px;cursor:pointer;
+  display:flex;align-items:center;gap:18px;transition:transform .25s,box-shadow .25s,border-color .25s;text-align:left}
+.day-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(168,118,28,.16);border-color:var(--gold)}
+.day-no{flex-shrink:0;width:54px;height:54px;border-radius:50%;border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:22px;color:var(--gold-dk)}
+.day-card .info{flex:1}
+.day-card .dname{font-family:var(--display);font-size:22px;color:var(--accent);font-weight:500}
+.day-card .ddate{color:var(--muted);font-style:italic;font-size:16px;margin-top:2px}
+.day-card .arrow{color:var(--gold);font-size:24px}
+
+/* generic gold button */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;cursor:pointer;
+  font-family:var(--serif);font-size:18px;padding:14px 26px;border-radius:40px;border:1.5px solid var(--gold);
+  background:var(--gold);color:#fff;transition:.2s;letter-spacing:.4px}
+.btn:hover{background:var(--gold-dk);border-color:var(--gold-dk)}
+.btn.ghost{background:transparent;color:var(--gold-dk)}
+.btn.ghost:hover{background:rgba(200,146,42,.1);color:var(--gold-dk)}
+.btn.wa{background:#1f7a44;border-color:#1f7a44}
+.btn.wa:hover{background:#176235;border-color:#176235}
+.btn svg{width:20px;height:20px;fill:currentColor}
+.btn-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:18px 0}
+
+/* info blocks on home */
+.panel{background:var(--panel);border:1px solid var(--gold-lt);border-radius:14px;padding:26px 24px;margin:22px 0;text-align:center;
+  box-shadow:0 8px 22px rgba(168,118,28,.08)}
+.panel h3{font-family:var(--display);color:var(--gold-dk);font-weight:500;font-size:22px;margin-bottom:6px}
+.panel p{color:var(--text);font-size:17px}
+.panel .small{color:var(--muted);font-size:15px;font-style:italic;margin-top:6px}
+
+/* hosts */
+.hosts{text-align:center;margin:30px 0 6px}
+.hosts .lbl{letter-spacing:3px;text-transform:uppercase;color:var(--gold-dk);font-size:13px;font-style:italic}
+.hosts .fam{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-top:14px}
+.hosts .fam .col{font-size:17px;color:var(--text);line-height:1.7}
+.hosts .fam .col .h{color:var(--accent);font-style:italic;font-size:15px;margin-bottom:4px}
+
+.footer{text-align:center;color:var(--muted);font-size:14px;font-style:italic;padding:30px 0 10px;letter-spacing:.5px}
+
+/* ---------- day detail page ---------- */
+.day-hero{text-align:center;padding:74px 0 6px}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:150;display:flex;align-items:center;justify-content:center;
+  padding:12px;background:rgba(250,244,232,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--gold-lt)}
+.back-btn{position:absolute;left:14px;top:50%;transform:translateY(-50%);background:transparent;border:none;cursor:pointer;
+  display:flex;align-items:center;gap:6px;color:var(--gold-dk);font-family:var(--serif);font-size:16px}
+.topbar .logo{width:38px;height:38px}
+.day-hero .tag{letter-spacing:3px;text-transform:uppercase;color:var(--gold-dk);font-size:13px;font-style:italic}
+.day-hero .dn{font-family:var(--display);color:var(--accent);font-size:36px;font-weight:500;margin-top:8px;line-height:1.15}
+.day-hero .gz{color:var(--gold-dk);font-size:20px;margin-top:4px}
+.detail-row{display:flex;gap:16px;margin:14px 0}
+.detail-box{flex:1;background:var(--panel);border:1px solid var(--gold-lt);border-radius:12px;padding:18px;text-align:center}
+.detail-box .k{letter-spacing:2px;text-transform:uppercase;color:var(--gold-dk);font-size:12px;font-style:italic}
+.detail-box .v{font-family:var(--display);color:var(--accent);font-size:21px;margin-top:6px}
+.detail-box .s{color:var(--muted);font-size:15px;font-style:italic;margin-top:3px}
+.mapframe{width:100%;height:300px;border:1px solid var(--gold-lt);border-radius:12px;margin:14px 0;filter:saturate(.92)}
+.addr{text-align:center;color:var(--muted);font-style:italic;font-size:16px;margin:4px 0 14px}
+
+
+/* Goker nickname under Nrayo */
+.name-with-nick{display:inline-flex;flex-direction:column;align-items:center}
+.nick-tag{font-family:var(--serif);font-size:18px;font-style:italic;color:var(--muted);
+  letter-spacing:.6px;margin-top:0;line-height:1.3;-webkit-text-fill-color:var(--muted)}
+
+/* ===== Luxury floral invitation theme ===== */
+body::before{
+ content:'';
+ position:fixed;
+ inset:0;
+ background:
+   radial-gradient(circle at 18% 12%, rgba(227,196,134,.30), transparent 46%),
+   radial-gradient(circle at 86% 84%, rgba(200,146,42,.22), transparent 52%),
+   radial-gradient(circle at 50% 50%, rgba(255,248,234,.6), transparent 70%),
+   linear-gradient(160deg, #fdf8ee 0%, #f6ead2 60%, #f0dfbe 100%);
+ z-index:-3;
+}
+.floating-florals{
+ position:fixed;
+ inset:0;
+ pointer-events:none;
+ overflow:hidden;
+ z-index:-1;
+}
+.flower{
+ position:absolute;
+ font-size:32px;
+ opacity:.18;
+ animation:floatFlower linear infinite;
+}
+.flower:nth-child(1){left:8%;top:15%;animation-duration:18s;}
+.flower:nth-child(2){left:85%;top:22%;animation-duration:22s;}
+.flower:nth-child(3){left:12%;top:75%;animation-duration:20s;}
+.flower:nth-child(4){left:80%;top:70%;animation-duration:25s;}
+.flower:nth-child(5){left:50%;top:10%;animation-duration:19s;}
+@keyframes floatFlower{
+ 0%{transform:translateY(0) rotate(0deg)}
+ 50%{transform:translateY(-18px) rotate(4deg)}
+ 100%{transform:translateY(0) rotate(0deg)}
+}
+.hero,.panel,.thanks,.day-card,.detail-box,.cd-box{
+ backdrop-filter: blur(8px);
+ background: linear-gradient(158deg, rgba(255,252,244,.94) 0%, rgba(250,238,214,.90) 100%) !important;
+ box-shadow:0 12px 35px rgba(200,146,42,.20);
+ border:1px solid rgba(200,146,42,.40) !important;
+}
+.hero:hover,.panel:hover,.thanks:hover,.day-card:hover{
+ box-shadow:0 16px 44px rgba(200,146,42,.30);
+}
+/* warm golden gradient on key headings */
+.section-title,.thanks h2,.panel h3,.hero .names,.day-hero .dn,.detail-box .v{
+ background:linear-gradient(100deg,#a8761c,#c8922a 50%,#9c4a32);
+ -webkit-background-clip:text;background-clip:text;
+ -webkit-text-fill-color:transparent;
+}
+/* gilded top accent line on each section card */
+.panel,.thanks{position:relative;overflow:hidden}
+.panel::after,.thanks::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+ background:linear-gradient(90deg,transparent,var(--gold),var(--gold-lt),var(--gold),transparent)}
+.gold-rule .dot{
+ animation: sparkle 2.8s infinite;
+}
+@keyframes sparkle{
+ 50%{transform:rotate(45deg) scale(1.5);}
+}
+
+
+/* ---------- Leaflet map ---------- */
+.mapframe{width:100%;height:300px;border:1px solid rgba(200,146,42,.45);border-radius:12px;margin:14px 0;overflow:hidden}
+.leaflet-container{font-family:var(--serif)!important;background:#f6ead2!important}
+.leaflet-popup-content-wrapper{border-radius:8px!important;border:1px solid rgba(200,146,42,.4);
+  box-shadow:0 6px 20px rgba(168,118,28,.25)!important;background:#fffdf7}
+.leaflet-popup-tip-container{display:none!important}
+.leaflet-popup-content{font-family:var(--display);font-size:16px;color:var(--accent)}
+.leaflet-control-attribution{font-size:10px!important}
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+</head>
+<body class="lang-en">
+<div class="floating-florals">
+  <div class="flower">✿</div>
+  <div class="flower">❀</div>
+  <div class="flower">✿</div>
+  <div class="flower">❀</div>
+  <div class="flower">✿</div>
+</div>
+
+<div class="lang-bar">
+  <button id="btnEn" class="on" onclick="setLang('en')">English</button>
+  <button id="btnTi" onclick="setLang('ti')">ትግርኛ</button>
+</div>
+
+<!-- =============== ENVELOPE =============== -->
+<section id="envelopeView" class="view active">
+  <div class="env-wrap">
+    <div class="envelope" id="envelope" onclick="openEnvelope()">
+      <div class="env-body"></div>
+      <div class="env-letter">
+        <div class="mini">
+          <div class="nm">N &amp; M</div>
+          <div class="sub en">Nrayo &amp; Melat</div>
+          <div class="sub ti">ንርኣዮ &amp; ሜላት</div>
+        </div>
+      </div>
+      <div class="env-pocket"></div>
+      <div class="env-flap"></div>
+      <div class="seal">
+        <svg class="seal-svg" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="46" fill="#c8922a"/>
+          <circle cx="50" cy="50" r="46" fill="none" stroke="#a8761c" stroke-width="2"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#fff" stroke-width="1" opacity=".6"/>
+          <text x="50" y="58" text-anchor="middle" font-family="Playfair Display,serif" font-size="30" fill="#fff8ea">N&amp;M</text>
+        </svg>
+      </div>
+    </div>
+    <div class="env-hint en">Tap to open your invitation</div>
+    <div class="env-hint ti">ዕድመኹም ንምርኣይ ጠውቑ</div>
+  </div>
+</section>
+
+<!-- =============== HOME =============== -->
+<section id="homeView" class="view">
+  <div class="wrap">
+    <div class="hero">
+      <div class="mono">
+        <svg viewBox="0 0 100 100" class="seal-svg" aria-hidden="true">
+          <circle cx="50" cy="50" r="47" fill="none" stroke="#c8922a" stroke-width="1.5"/>
+          <circle cx="50" cy="50" r="40" fill="none" stroke="#e3c486" stroke-width="1"/>
+          <text x="50" y="60" text-anchor="middle" font-family="Playfair Display,serif" font-size="30" fill="#a8761c">N&amp;M</text>
+          <path d="M50 8 q3 5 0 8 q-3 -3 0 -8 M50 84 q3 5 0 8 q-3 -3 0 -8" fill="#c8922a"/>
+        </svg>
+      </div>
+      <div class="eyebrow en">Together with their families</div>
+      <div class="eyebrow ti">ምስ ስድራቤቶም</div>
+      <div class="names" style="margin-top:14px">
+        <span class="name-with-nick">
+          <span class="en">Nrayo Solomon</span><span class="ti">ንርኣዮ ሰሎሙን</span>
+          <span class="nick-tag">( Goker )</span>
+        </span>
+        <span class="amp">&amp;</span>
+        <span class="en">Melat Daniel</span><span class="ti">ሜላት ዳኒኤል</span>
+      </div>
+
+      <div class="gold-rule"><span class="ln"></span><span class="dot"></span><span class="ln r"></span></div>
+
+      <p class="verse">
+        <span class="en">Therefore they are no longer two, but one flesh. What God has joined together, let no one separate.</span>
+        <span class="ti">ደጊም ሓደ ስጋ እዮም እምበር፡ ክልተ ኣይኰኑን። ነቲ ኣምላኽ ዘጋጠሞስ፡ ሰብ ኣይፍለዮ።</span>
+        <span class="ref">Matthew 19:6 · ማቴዎስ 19:6</span>
+      </p>
+    </div>
+
+    <!-- countdown -->
+    <div class="countdown" id="countdown"></div>
+    <div class="cd-note en">until the celebration begins</div>
+    <div class="cd-note ti">ጽምብል ክሳብ ዝጅምር</div>
+
+    <!-- thank you -->
+    <div class="thanks">
+      <h2 class="en">Welcome</h2><h2 class="ti">እንቋዕ ብደሓን መጻእኩም</h2>
+      <p class="en">We are so happy you are here. Thank you for being part of our special day. Welcome to the celebration of Nrayo &amp; Melat. 💍</p>
+      <p class="ti">ኣብዚ ብምምጻእኩም ኣዚና ሕጉሳት ኢና። ኣካል ናይቲ ፍሉይ መዓልትና ስለ ዝኾንኩም የቐንየልና። እንቋዕ ናብ ጽምብል ሜላትን ንርኣዮን ብደሓን መጻእኩም። 💍</p>
+    </div>
+
+    <!-- days -->
+    <h2 class="section-title en">The Celebration</h2>
+    <h2 class="section-title ti">እቲ ጽምብል</h2>
+    <div class="eyebrow en">Three days of joy — tap a day for details</div>
+    <div class="eyebrow ti">ሰለስተ መዓልታት ሓጐስ — ንዝርዝር ጠውቑ</div>
+
+    <div class="days">
+      <div class="day-card" onclick="showDay(1)">
+        <div class="day-no">I</div>
+        <div class="info">
+          <div class="dname en">The Covenant Day</div><div class="dname ti">ዕለት ቃል-ኪዳን</div>
+          <div class="ddate en">Saturday, 1 August 2026 · 11:00 AM</div>
+          <div class="ddate ti">ቀዳም 1 ነሓሰ 2026 · 11:00 ቅ.ቀ</div>
+        </div>
+        <div class="arrow">›</div>
+      </div>
+      <div class="day-card" onclick="showDay(2)">
+        <div class="day-no">II</div>
+        <div class="info">
+          <div class="dname en">Main Wedding Celebration</div><div class="dname ti">ቀንዲ መዓልቲ መርዓ</div>
+          <div class="ddate en">Sunday, 2 August 2026 · 5:00 PM</div>
+          <div class="ddate ti">ሰንበት 2 ነሓሰ 2026 · 5:00 ድ.ቀ</div>
+        </div>
+        <div class="arrow">›</div>
+      </div>
+      <div class="day-card" onclick="showDay(3)">
+        <div class="day-no">III</div>
+        <div class="info">
+          <div class="dname en">Hamawti — In-Laws' Day</div><div class="dname ti">ሓማውቲ</div>
+          <div class="ddate en">Tuesday, 4 August 2026 · 4:00 PM</div>
+          <div class="ddate ti">ሰሉስ 4 ነሓሰ 2026 · 4:00 ድ.ቀ</div>
+        </div>
+        <div class="arrow">›</div>
+      </div>
+    </div>
+
+    <!-- Bune assistant -->
+    <div class="panel">
+      <h3 class="en">Questions? Meet Bune 🤖</h3><h3 class="ti">ሕቶ ኣለኩም? ምስ ቡነ ተራኸቡ 🤖</h3>
+      <p class="en">Bune is our WhatsApp assistant. Ask anything about the wedding — venue, time, directions, dress code — any time, day or night.</p>
+      <p class="ti">ቡነ ናይ WhatsApp ሓጋዚና እዩ። ብዛዕባ ሰርግ ዝኾነ ሕቶ — ቦታ፡ ሰዓት፡ መገዲ፡ ኣከዳድና — ኣብ ዝኾነ ግዜ ሕተቱ።</p>
+      <div class="btn-row">
+        <a class="btn wa" href="https://wa.me/447445135152?text=Bune%20hello" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-1.9-1.2 7.2 7.2 0 0 1-1.3-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3 1 2.6 1.1 2.7s1.9 2.9 4.6 4c1.6.7 2.2.7 3 .6.5-.1 1.4-.6 1.6-1.1a2 2 0 0 0 .1-1.1c0-.1-.2-.2-.4-.3z"/></svg>
+          <span class="en">Chat with Bune</span><span class="ti">ምስ ቡነ ተዛተዩ</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- WhatsApp group -->
+    <div class="panel">
+      <h3 class="en">Join the Wedding Group 📱</h3><h3 class="ti">ኣብ ጉጅለ መርዓ ዋትስኣፕ📱 እተዉ</h3>
+      <p class="en">Join our WhatsApp group for live updates, directions and announcements.</p>
+      <p class="ti">ህሉው ሓበሬታ፡ መገድን ምልክታታትን ንምርካብ ናብ ናይ WhatsApp ጉጅለ እተዉ።</p>
+      <div class="btn-row">
+        <a class="btn" href="https://chat.whatsapp.com/IdNgp7NsIQ96SuJ69Y4RZJ?mode=gi_t" target="_blank" rel="noopener">
+          <span class="en">Join WhatsApp Group</span><span class="ti">ናብ ጉጅለ እተዉ</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Transport -->
+    <div class="panel">
+      <h3 class="en">Getting Around Addis 🚗</h3><h3 class="ti">ኣብ ኣዲስ ኣበባ ምንቅስቓስ 🚗</h3>
+      <p class="en">Use the Ride app to book a taxi anywhere in Addis Ababa — convenient and reliable for our guests.</p>
+      <p class="ti">ኣብ ኣዲስ ኣበባ ታክሲ ንምሓዝ Ride መተግበሪ ተጠቐሙ — ምችእን ኣስተማማንን።</p>
+      <div class="btn-row">
+        <a class="btn ghost" href="https://apps.apple.com/gb/app/ride-ethiopia-djibouti/id1375514824" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <span class="en">iPhone App</span><span class="ti">iPhone</span>
+        </a>
+        <a class="btn ghost" href="https://play.google.com/store/apps/details?id=com.multibrains.taxi.passenger.ridepassengeret&amp;pcampaignid=web_share" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="m3.615 3.078 8.607 8.607-8.607 8.607A1 1 0 0 1 3 19.5v-15a1 1 0 0 1 .615-.922zM5.33 20.5l9.17-5.293-2.207-2.207zm9.17-12.707L5.33 2.5l6.963 7.5zm2.665 1.534-2.05-2.05 2.05-2.05 2.785 1.608a1 1 0 0 1 0 1.884z"/></svg>
+          <span class="en">Android App</span><span class="ti">Android</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- hosts -->
+    <div class="hosts">
+      <div class="lbl en">With honour, the families invite you</div>
+      <div class="lbl ti">ኣክበርትኩም</div>
+      <div class="fam">
+        <div class="col">
+          <div class="h en">Groom's family</div><div class="h ti">ስድራ መርዓዊ</div>
+          ኣ/ቶ ሰሎሙን ገ/ዝጊሄር<br>ወ/ሮ ኣዜብ ሊባኖስ
+        </div>
+        <div class="col">
+          <div class="h en">Bride's family</div><div class="h ti">ስድራ መርዓት</div>
+          ኣ/ቶ ዳኒኤል ዓ/ማሪያም<br>ወ/ሮ ኣዜብ መጎስ<br>ኣ/ቶ መጎሰ ዘርአ
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span class="en">Addis Ababa · Ethiopia &nbsp;|&nbsp; 1 – 4 August 2026</span>
+      <span class="ti">ኣዲስ ኣበባ · ኢትዮጵያ &nbsp;|&nbsp; 1 – 4 ነሓሰ 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- =============== DAY DETAIL =============== -->
+<section id="dayView" class="view">
+  <div class="topbar">
+    <button class="back-btn" onclick="showHome()">
+      <span style="font-size:20px">‹</span>
+      <span class="en">Back</span><span class="ti">ተመለስ</span>
+    </button>
+    <div class="logo">
+      <svg viewBox="0 0 100 100" class="seal-svg" aria-hidden="true">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#c8922a" stroke-width="2"/>
+        <text x="50" y="60" text-anchor="middle" font-family="Playfair Display,serif" font-size="30" fill="#a8761c">N&amp;M</text>
+      </svg>
+    </div>
+  </div>
+  <div class="wrap" id="dayContent"></div>
+</section>
+
+<script>
+/* ---------- language ---------- */
+function setLang(l){
+  document.body.classList.remove('lang-en','lang-ti');
+  document.body.classList.add('lang-'+l);
+  document.documentElement.lang = l==='ti'?'ti':'en';
+  btnEn.classList.toggle('on', l==='en');
+  btnTi.classList.toggle('on', l==='ti');
+}
+
+/* ---------- views ---------- */
+function show(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function openEnvelope(){
+  const e=document.getElementById('envelope');
+  e.classList.add('open');
+  setTimeout(()=>show('homeView'),1500);
+}
+function showHome(){ show('homeView'); }
+
+/* ---------- day data ---------- */
+const DAYS={
+ 1:{tag_en:'Day One · The Covenant Day',tag_ti:'መዓልቲ ሓደ · ዕለት ቃል-ኪዳን',
+    name_en:'The Covenant Day',name_ti:'ዕለት ቃል-ኪዳን',gz:'ዕለት ቃል-ኪዳን',
+    date_en:'Saturday, 1 August 2026',date_ti:'ቀዳም 1 ነሓሰ 2026',
+    time:'11:00 AM',venue_en:'Union Restaurant & Cocktail Bar',venue_ti:'Union Restaurant & Cocktail Bar',
+    dress_en:'White traditional, or all white',dress_ti:'ጻዕዳ ባህላዊ፡ ወይ ምሉእ ጻዕዳ',
+    addr_en:'Bus Station, Africa Ave, Addis Ababa · 2Q57+P2',addr_ti:'ቡስ ስቴሽን፡ ኣፍሪካ ጎደና፡ ኣዲስ ኣበባ · 2Q57+P2',
+    q:'2Q57+P2 Addis Ababa Ethiopia'},
+ 2:{tag_en:'Day Two · Main Wedding',tag_ti:'መዓልቲ ክልተ · ቀንዲ መርዓ',
+    name_en:'Main Wedding Celebration',name_ti:'ቀንዲ መዓልቲ መርዓ',gz:'ቀንዲ መዓልቲ መርዓ',
+    date_en:'Sunday, 2 August 2026',date_ti:'ሰንበት 2 ነሓሰ 2026',
+    time:'5:00 PM',venue_en:'De Leopol Hotel (Union Cocktail Bar Restaurant)',venue_ti:'ዲ ሊዮፖል ሆቴል',
+    dress_en:'Smart suit, or suit & Zurya',dress_ti:'ምልኩዕ ሱፍ፡ ወይ ሱፍን ዙርያን',
+    addr_en:'De Leopol Hotel, Addis Ababa · 2Q5F+V2',addr_ti:'ዲ ሊዮፖል ሆቴል፡ ኣዲስ ኣበባ · 2Q5F+V2',
+    q:'2Q5F+V2 Addis Ababa Ethiopia'},
+ 3:{tag_en:"Day Three · In-Laws' Day",tag_ti:'መዓልቲ ሰለስተ · ሓማውቲ',
+    name_en:'Hamawti',name_ti:'ሓማውቲ',gz:'ሓማውቲ',
+    date_en:'Tuesday, 4 August 2026',date_ti:'ሰሉስ 4 ነሓሰ 2026',
+    time:'4:00 PM',venue_en:'Hebir Ethiopia Cultural Restaurant, Bole',venue_ti:'ህብር ኢትዮጲያ ባህላዊ ሬስቶራንት፡ ቦሌ',
+    dress_en:'Traditional Kidan',dress_ti:'ባህላዊ ክዳን',
+    addr_en:'Africa Ave, Bole, Addis Ababa · XQRM+FM',addr_ti:'ኣፍሪካ ጎደና፡ ቦሌ፡ ኣዲስ ኣበባ · XQRM+FM',
+    q:'XQRM+FM Addis Ababa Ethiopia'}
+};
+
+function showDay(n){
+  const d=DAYS[n];
+  const mapLink='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.q);
+  const html=`
+    <div class="day-hero">
+      <span class="tag en">${d.tag_en}</span><span class="tag ti">${d.tag_ti}</span>
+      <div class="dn en">${d.name_en}</div><div class="dn ti">${d.name_ti}</div>
+    </div>
+    <div class="gold-rule"><span class="ln"></span><span class="dot"></span><span class="ln r"></span></div>
+    <div class="detail-row">
+      <div class="detail-box">
+        <div class="k en">Date</div><div class="k ti">ዕለት</div>
+        <div class="v en">${d.date_en}</div><div class="v ti">${d.date_ti}</div>
+      </div>
+      <div class="detail-box">
+        <div class="k en">Time</div><div class="k ti">ሰዓት</div>
+        <div class="v">${d.time}</div>
+      </div>
+    </div>
+    <div class="detail-box" style="margin:14px 0">
+      <div class="k en">Venue</div><div class="k ti">ቦታ</div>
+      <div class="v en">${d.venue_en}</div><div class="v ti">${d.venue_ti}</div>
+    </div>
+    <div class="detail-box" style="margin:14px 0">
+      <div class="k en">Dress code</div><div class="k ti">ኣከዳድና</div>
+      <div class="v en">${d.dress_en}</div><div class="v ti">${d.dress_ti}</div>
+    </div>
+    <div class="mapframe" id="daymap"></div>
+    <div class="addr en">${d.addr_en}</div><div class="addr ti">${d.addr_ti}</div>
+    <div class="btn-row">
+      <a class="btn" href="${mapLink}" target="_blank" rel="noopener">
+        <span class="en">Open in Google Maps</span><span class="ti">ኣብ Google Maps ክፈት</span>
+      </a>
+      <a class="btn ghost" href="https://www.ride.com.et/" target="_blank" rel="noopener">
+        <span class="en">Book a Ride</span><span class="ti">Ride ሓዙ</span>
+      </a>
+    </div>
+    <div class="btn-row">
+      <a class="btn wa" href="https://wa.me/447445135152?text=Bune%20${encodeURIComponent(d.name_en)}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-1.9-1.2 7.2 7.2 0 0 1-1.3-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3 1 2.6 1.1 2.7s1.9 2.9 4.6 4c1.6.7 2.2.7 3 .6.5-.1 1.4-.6 1.6-1.1a2 2 0 0 0 .1-1.1c0-.1-.2-.2-.4-.3z"/></svg>
+        <span class="en">Ask Bune about this day</span><span class="ti">ብዛዕባ እዛ መዓልቲ ንቡነ ሕተት</span>
+      </a>
+    </div>
+    <div class="footer" style="padding-bottom:40px">
+      <span class="en">Nrayo &amp; Melat · 2026</span><span class="ti">ንርኣዮ &amp; ሜላት · 2026</span>
+    </div>`;
+  document.getElementById('dayContent').innerHTML=html;
+  show('dayView');
+  setTimeout(()=>_initMap(d.venue_en),80);
+}
+
+/* ---------- countdown to first event (Sat 1 Aug 2026, 11:00 EAT = 08:00 UTC) ---------- */
+const TARGET=new Date(Date.UTC(2026,7,1,8,0,0));
+function tick(){
+  const now=new Date();
+  let diff=Math.max(0,Math.floor((TARGET-now)/1000));
+  const dd=Math.floor(diff/86400);diff-=dd*86400;
+  const hh=Math.floor(diff/3600);diff-=hh*3600;
+  const mm=Math.floor(diff/60);const ss=diff-mm*60;
+  const box=(n,en,ti)=>`<div class="cd-box"><div class="n">${n}</div><div class="l"><span class="en">${en}</span><span class="ti">${ti}</span></div></div>`;
+  document.getElementById('countdown').innerHTML=
+    box(dd,'Days','መዓልቲ')+box(hh,'Hours','ሰዓት')+box(mm,'Min','ደቒቕ')+box(ss,'Sec','ካልኢት');
+}
+tick();setInterval(tick,1000);
+
+/* ---------- Leaflet map with OpenStreetMap + Nominatim geocoding ---------- */
+let _lmap=null;
+function _initMap(venue){
+  if(_lmap){_lmap.remove();_lmap=null;}
+  const el=document.getElementById('daymap');
+  if(!el) return;
+  const addis=[9.0192,38.7525];
+  _lmap=L.map('daymap',{scrollWheelZoom:false,zoomControl:true}).setView(addis,13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',maxZoom:19
+  }).addTo(_lmap);
+  const q=encodeURIComponent(venue+', Addis Ababa, Ethiopia');
+  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+q,{headers:{'Accept-Language':'en'}})
+    .then(r=>r.json())
+    .then(data=>{
+      if(data&&data[0]){
+        const lat=parseFloat(data[0].lat),lon=parseFloat(data[0].lon);
+        _lmap.setView([lat,lon],16);
+        L.marker([lat,lon]).addTo(_lmap).bindPopup('<b>'+venue+'</b>').openPopup();
+      }else{
+        L.marker(addis).addTo(_lmap).bindPopup('<b>Addis Ababa</b><br>Use the button below for directions').openPopup();
+      }
+    })
+    .catch(()=>{L.marker(addis).addTo(_lmap).bindPopup('<b>Addis Ababa</b>').openPopup();});
+}
+
+</script>
+</body>
+</html>
